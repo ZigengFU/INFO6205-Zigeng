@@ -161,13 +161,47 @@ public class Benchmark<T> {
     public static void main(String[] args) {
         Random random = new Random();
         int m = 100; // This is the number of repetitions: sufficient to give a good mean value of timing
-        int n = 1000; // This is the size of the array
+        int n = 1000;// This is the original size of the array
+        //#1: run time of random integer array
         for (int k = 0; k < 5; k++) {
             Integer[] array = new Integer[n];
             for (int i = 0; i < n; i++) array[i] = random.nextInt();
-            benchmarkSort(array, "InsertionSort: " + n, new InsertionSort<>(), m);
+            benchmarkSort(array, "Random array of size " + n, new InsertionSort<>(), m);
             n = n * 2;
         }
+        System.out.println("");
+        
+        //#2: run time of ordered integer array
+        n = 1000;
+        for (int k = 0; k < 5; k++) {
+            Integer[] array = new Integer[n];
+            for (int i = 0; i < n; i++) array[i] = n+i;
+            benchmarkSort(array, "Ordered array of size " + n, new InsertionSort<>(), m);
+            n = n * 2;
+        }
+        System.out.println("");
+        
+        //#3: run time of reverse-ordered integer array
+        n = 1000;
+        for (int k = 0; k < 5; k++) {
+            Integer[] array = new Integer[n];
+            for (int i = 0; i < n; i++) array[i] = n-i;
+            benchmarkSort(array, "Reverse-ordered array of size " + n, new InsertionSort<>(), m);
+            n = n * 2;
+        }
+        System.out.println("");
+        
+        //#4: run time of partially-ordered integer array
+        n = 1000;
+        for (int k = 0; k < 5; k++) {
+            Integer[] array = new Integer[n];
+            for (int i = 0; i < n/2; i++) array[i] = n+i;
+            for (int i = n/2; i < n; i++) array[i] = random.nextInt();
+            benchmarkSort(array, "Partially-ordered array of size " + n, new InsertionSort<>(), m);
+            n = n * 2;
+        }
+        System.out.println("");
+        
     }
 
     private static void benchmarkSort(Integer[] array, String name, Sort<Integer> sorter, int m) {
