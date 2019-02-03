@@ -2,7 +2,7 @@
  * Copyright (c) 2018. Phasmid Software
  */
 
-package edu.neu.coe.info6205.util;
+package benchmarkTest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

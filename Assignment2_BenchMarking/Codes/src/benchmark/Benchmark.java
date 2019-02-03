@@ -1,3 +1,5 @@
+package benchmark;
+
 /*
  * Copyright (c) 2018. Phasmid Software
  */
@@ -107,7 +109,7 @@ public class Benchmark<T> {
      */
     public double run(Supplier<T> supplier, int m) {
         // Warmup phase
-        int warmupRuns = Integer.min(2, Integer.max(10, m / 10));
+        int warmupRuns = Integer.max(2, Integer.min(10, m / 10));
         for (int i = 0; i < warmupRuns; i++) doRun(supplier.get(), true);
         // Timed phase
         long totalTime = 0;
@@ -122,15 +124,22 @@ public class Benchmark<T> {
      * @return the number of nanoseconds elapsed for this run
      */
     private long doRun(T t, boolean warmup) {
-        // TO BE IMPLEMENTED: if fPre isn't null, then invoke it (using "apply") and memoize its result as "t1". Otherwise, assign "t" to "t1."
-
-        // TO BE IMPLEMENTED: if warmup is true, simply invoke fRun with t1 (using "accept") and return 0.
-
-        // TO BE IMPLEMENTED: start the timer, invoke fRun on t1 (using "accept"), stop the timer,
-        // ... invoke fPost (if not-null) on t1 (using "accept").
-
-        // TO BE IMPLEMENTED: return the number of nanoseconds elapsed.
-        return 0L;
+        // if fPre isn't null, then invoke it (using "apply") and memoize its result as "t1". Otherwise, assign "t" to "t1."
+        T t1 = fPre != null ? fPre.apply(t) : t;
+        // if warmup is true, simply invoke fRun with t1 (using "accept") and return 0.
+        if (warmup == true) {
+            fRun.accept(t1);
+            return 0;
+        }
+        // start the timer, invoke fRun on t1 (using "accept"), stop the timer
+        long startTime = System.nanoTime();    
+        fRun.accept(t1);
+        long estimatedTime = System.nanoTime() - startTime;     
+        // invoke fPost (if not-null) on t1 (using "accept").
+        if (fPost != null)
+            fPost.accept(t1);
+        // return the number of nanoseconds elapsed.
+        return estimatedTime;
     }
 
     private final UnaryOperator<T> fPre;
@@ -138,7 +147,7 @@ public class Benchmark<T> {
     private final Consumer<T> fPost;
 
     /**
-     * ======================================= MAIN PROGRAM: NOT USED IN ASSIGNMENT 2 ========================================
+     * ======================================= MAIN PROGRAM===============================================
      *
      * Everything below this point has to do with a particular example of running a Benchmark
      * for various sort methods.

@@ -1,3 +1,8 @@
+package benchmark;
+
+
+import java.util.Arrays;
+
 public class InsertionSort<X extends Comparable<X>> implements Sort<X> {
 
     /**
@@ -15,8 +20,8 @@ public class InsertionSort<X extends Comparable<X>> implements Sort<X> {
 
     @Override
     public void sort(X[] xs, int from, int to) {
-        // TO BE IMPLEMENTED ...
-        // ... END IMPLEMENTATION
+        // simple sorting method using Arrays.sort()
+        Arrays.sort(xs, 0, xs.length);
     }
 
     @Override

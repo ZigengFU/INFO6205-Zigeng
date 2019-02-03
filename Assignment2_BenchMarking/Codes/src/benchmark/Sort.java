@@ -1,3 +1,5 @@
+package benchmark;
+
 import java.util.Arrays;
 
 public interface Sort<X extends Comparable<X>> {
